@@ -10,6 +10,8 @@ import google.auth
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
+from bs4 import BeautifulSoup as bs
+
 SCOPES = ["https://www.googleapis.com/auth/gmail.readonly"]
 
 
@@ -57,11 +59,14 @@ def check_messages(creds):
     for msg_id in message_id:
         try:
             msg = key.get(userId="me", id=msg_id).execute().get('payload').get('parts')[1].get('body').get('data')
-#             final_message_list.append(str(base64.b64decode(key.get(userId="me", id=msg_id).execute().get('payload').get('parts')[0].get('body').get('data')), encoding='utf-8'))
+            msg2 = str(base64.urlsafe_b64decode(msg), encoding='utf-8')
+            final_msg = bs(msg2, "html.parser").get_text()
+
         except:
             msg = key.get(userId="me", id=msg_id).execute().get('payload').get('body').get('data')
+            final_msg = str(base64.urlsafe_b64decode(msg), encoding='utf-8')
         
-        final_message_list.append(str(base64.urlsafe_b64decode(msg), encoding='utf-8'))
+        final_message_list.append(final_msg)
         
             
     
