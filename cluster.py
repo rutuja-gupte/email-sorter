@@ -185,7 +185,7 @@ def label_maker(clusters):
     label_vectors = vectorizer.transform(pre_labels)
     
     dictionary = {}
-
+    used_indices = []
     for i, cluster in enumerate(clusters):
         aggregate_scores = np.zeros(len(pre_labels))
         word_counts = {}
@@ -206,6 +206,11 @@ def label_maker(clusters):
 
         # Find the label with the highest similarity
         max_sim_index = np.argmax(aggregate_scores)
+        while max_sim_index in used_indices:
+            aggregate_scores[max_sim_index] = np.nan
+            max_sim_index = np.nanargmax(aggregate_scores)
+            
+        used_indices.append(max_sim_index)
         assigned_label = pre_labels2[max_sim_index]
         
         dictionary[i] = assigned_label

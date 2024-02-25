@@ -13,7 +13,6 @@ app = flask.Flask(__name__)
 @app.route('/')
 def index():
     # Serve an HTML file that includes the JavaScript for popup checking
-    result = subprocess.run(["cat", "templates/test.html"], capture_output=True, text=True, check=True)
     # print(result.stdout)
     with open("templates/test.html") as f:
         return (f.read())
@@ -49,7 +48,7 @@ def folders():
         
     creds = script.authenticate()
     # a: header; b: messages; c:pre-process; d:vectors; e:cluster matrix; g:groups; h:grouped headers; i:grouped msges; j:label_maker data
-    a,b = script.check_messages(creds)
+    a,b, extra = script.check_messages(creds)
     c = cleanup(b)
     d = pre_processing(c)
     # f is the figure
@@ -76,10 +75,19 @@ def folders():
             l[int(item[0])] = []
         l[int(item[0])].append(b[idx])
         
+    extra2 = {}
+    for idx, item in enumerate(g):
+        if item[0] not in extra2:
+            extra2[int(item[0])] = []
+        extra2[int(item[0])].append(extra[idx])
+        
     with open("result_h.json", "w") as f:
         json.dump(h, f)
     with open("result_k.json", "w") as f:
         json.dump(l, f)
+        
+    with open("result_extra.json", "w") as f:
+        json.dump(extra2,f)
         
     with open("templates/result.html") as f: 
         html = f.read()
@@ -130,7 +138,15 @@ def mail():
     heads = h[group]
     links = []
     for idx, head in enumerate(heads):
-        head_string = f'<li><a href="/content.html?group={group}&pos={idx}">{head}</a></li>'
+        nice_head = f"""
+        <h3>{head['Subject']}</h3></a>
+        <ul>
+        <li>From: {head['From']} </li>
+        <li>To: {head['To']} </li>
+        <li>Date: {head['Date']} </li>
+        </ul>
+        """
+        head_string = f'<li><a href="/content.html?group={group}&pos={idx}">{nice_head}</li>'
         links.append(head_string)
     replace_string = "".join(links)
     with open("templates/folder-contents.html") as f:
@@ -149,18 +165,41 @@ def content():
         h = json.load(f)
     with open("result_k.json") as f:
         k = json.load(f)
+        
+    with open("result_extra.json") as f:
+        extra = json.load(f)
+        
+    head = h[group][int(pos)]
+    nice_head = f"""
+        <h3>{head['Subject']}</h3></a>
+        <ul>
+        <li>From: {head['From']} </li>
+        <li>To: {head['To']} </li>
+        <li>Date: {head['Date']} </li>
+        </ul>
+        """
+    head_string = f'<h1>{nice_head}</h1>'
     
-    header = str(h[group][int(pos)])
-    msg = k[group][int(pos)]
+    msg = extra[group][int(pos)]
     
     with open("templates/email-output.html") as f:
         html = f.read()
         
-    html = html.replace("heads", header)
+    html = html.replace("heads", head_string)
     html = html.replace("message", msg)
         
     
     return html
+
+@app.route('/about.html')
+def about():
+    with open("templates/about.html") as f:
+        return(f.read())
+    
+@app.route('/contact.html')
+def contact():
+    with open("templates/contact.html") as f:
+        return(f.read())
 
 @app.route('/image')
 def dash2():

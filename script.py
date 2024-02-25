@@ -56,6 +56,7 @@ def check_messages(creds):
     # MessagePart object has data key in base64
     final_message_list = []
     heads = []
+    html = []
       
     for msg_id in message_id:
         try:
@@ -72,8 +73,9 @@ def check_messages(creds):
         head_new = {d['name']:d['value'] for d in head if d['name'] in ['From', 'Date', 'Subject', 'To']}
         heads.append(head_new)
         final_message_list.append(final_msg)
+        html.append(msg2)
     
-    return heads, final_message_list
+    return heads, final_message_list, html
 
 # if __name__ == "__main__":
 #     creds = authenticate()
