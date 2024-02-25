@@ -55,24 +55,26 @@ def check_messages(creds):
     # MessagePart object had body key with MessagePartBody object
     # MessagePart object has data key in base64
     final_message_list = []
+    heads = []
       
     for msg_id in message_id:
         try:
-            msg = key.get(userId="me", id=msg_id).execute().get('payload').get('parts')[1].get('body').get('data')
+            msg = key.get(userId="me", id=msg_id).execute().get('payload').get('parts')[0].get('body').get('data')
             msg2 = str(base64.urlsafe_b64decode(msg), encoding='utf-8')
             final_msg = bs(msg2, "html.parser").get_text()
 
         except:
             msg = key.get(userId="me", id=msg_id).execute().get('payload').get('body').get('data')
-            final_msg = str(base64.urlsafe_b64decode(msg), encoding='utf-8')
+            msg2 = str(base64.urlsafe_b64decode(msg), encoding='utf-8')
+            final_msg = bs(msg2, "html.parser").get_text()
         
+        head = key.get(userId="me", id=msg_id).execute().get('payload').get('headers')
+        head_new = {d['name']:d['value'] for d in head if d['name'] in ['From', 'Date', 'Subject', 'To']}
+        heads.append(head_new)
         final_message_list.append(final_msg)
-        
-            
     
-    return final_message_list
+    return heads, final_message_list
 
 if __name__ == "__main__":
     creds = authenticate()
     messages = check_messages(creds)
-    print(messages[:5])
