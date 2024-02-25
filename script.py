@@ -62,7 +62,7 @@ def check_messages(creds):
         try:
             msg = key.get(userId="me", id=msg_id).execute().get('payload').get('parts')[0].get('body').get('data')
             if msg == None:
-                continue:
+                continue
             msg2 = str(base64.urlsafe_b64decode(msg), encoding='utf-8')
             final_msg = bs(msg2, "html.parser").get_text()
 
