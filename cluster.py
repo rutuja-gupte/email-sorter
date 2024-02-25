@@ -172,10 +172,10 @@ def cluster(vectors):
     scaler = StandardScaler()
     scaled = scaler.fit_transform(vectors)
     Z = linkage(scaled, method='complete')
-    fig = plt.figure(figsize=(10, 7))
-    dendrogram(Z)
-    fig.tight_layout
-    return Z, plt
+#     fig = plt.figure(figsize=(10, 7))
+#     dendrogram(Z)
+#     fig.tight_layout
+    return Z
 
 def label_maker(clusters):
     

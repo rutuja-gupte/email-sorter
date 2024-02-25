@@ -1,0 +1,95 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            background-image: url('image?fname=background.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            /* Use a fallback background color in case the image fails to load */
+            background-color: #464646;
+        }
+
+        .fullscreen-background {
+            position: fixed; /* Use absolute for scrolling content */
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-image: url('path/to/your/image.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            z-index: -1; /* Ensure it stays behind other content */
+        }
+        
+        h1 {
+            text-align: center;
+            color: #333; /* Dark grey color for the title */
+            margin-bottom: 10px; /* Space between title and pink line */
+        }
+        
+        p{
+            text-align:center;
+        }
+
+        input {
+            background-color: #04AA6D;
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 17px;
+            font-family: Raleway;
+            cursor: pointer;
+        }
+        
+        .centered-button {
+            text-align:center;
+            display: block; /* Make the button a block-level element */
+            margin: 0 auto; /* Auto margins on both sides */
+            width: 100px; /* Specify a width for the button */
+        }
+    </style>
+    <title>Google API Script Runner</title>
+    <script> 
+        function checkPopupsAndRunScript() {
+            let testPopup = window.open('', '_blank', 'width=100,height=100');
+            if (!testPopup) {
+                alert('Popups are blocked. Please enable popups for this site and try again.');
+            } else {
+                testPopup.close();
+                // If popups are not blocked, attempt to run the script
+                fetch('/run-script')
+                    .then(response => response.json())
+                    .then(data => {
+                        if(data.success) {
+                            window.location.href = '/categories.html';
+                        } else {
+                            alert('Script execution failed: ' + data.error);
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="fullscreen-background"></div>
+    <h1>Welcome to Email Sorter</h1>
+    <form action="/folder.html">
+        <p>Check for Popups to Move Ahead!</p>
+        <input type="submit" class="centered-button" onclick=checkPopupsAndRunScript()>
+    </form>
+    <!-- <button onclick="checkPopupsAndRunScript()">Run Script</button> -->
+</body>
+</html>

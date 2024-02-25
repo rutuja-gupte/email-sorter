@@ -75,6 +75,7 @@ def check_messages(creds):
     
     return heads, final_message_list
 
-if __name__ == "__main__":
-    creds = authenticate()
-    messages = check_messages(creds)
+# if __name__ == "__main__":
+#     creds = authenticate()
+#     messages = check_messages(creds)
+#     messages

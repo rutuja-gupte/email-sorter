@@ -1,0 +1,56 @@
+<!-- templates/folders.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- <script> 
+        function checkPopupsAndRunScript() {
+            let testPopup = window.open('', '_blank', 'width=100,height=100');
+            if (!testPopup) {
+                alert('Popups are blocked. Please enable popups for this site and try again.');
+            } else {
+                testPopup.close();
+                // If popups are not blocked, attempt to run the script
+                fetch('/run-script')
+                    .then(response => response.json())
+                    .then(data => {
+                        if(data.success) {
+                            alert('Script Execution successful');
+                        } else {
+                            alert('Script execution failed: ' + data.error);
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+            }
+        }
+    </script> -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Folders Created:</title>
+    <style>
+        .folder-icon {
+            display: inline-block;
+            margin: 10px;
+            text-align: center;
+        }
+        .folder-icon img {
+            width: 50px; /* Adjust size as needed */
+        }
+        .folder-icon a {
+            text-decoration: none;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <h1>Folders</h1>
+    <div class="folders">
+        <ul>
+            <li id="img"> <img src="image?fname=website-images/folder-icon.jpg"><a href="/mail.html?group=0">REPLACEA</a></li>
+            <li id="img"> <img src="image?fname=website-images/folder-icon.jpg"><a href="/mail.html?group=1">REPLACEB</a></li>
+            <li id="img"> <img src="image?fname=website-images/folder-icon.jpg"><a href="/mail.html?group=2">REPLACEC</a></li>
+            <li id="img"> <img src="image?fname=website-images/folder-icon.jpg"><a href="/mail.html?group=3">REPLACED</a></li>
+            <li id="img"> <img src="image?fname=website-images/folder-icon.jpg"><a href="/mail.html?group=4">REPLACEE</a></li>
+        </ul>
+    </div>
+</body>
+</html>

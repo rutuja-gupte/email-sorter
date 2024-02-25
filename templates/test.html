@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sort The Mess</title>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            overflow: hidden; /* Prevents scrolling caused by the fixed position of the background */
+        }
+        
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('image?fname=background-image.jpeg'); /* Update with your image path */
+            background-size: cover;
+            background-position: center;
+            filter: blur(8px);
+            z-index: -1; /* Ensures background is behind content */
+        }
+        
+        .main-content {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            z-index: 1; /* Ensures content is above the background */
+        }
+        
+        .center-container {
+            max-width: 1000px; /* Increased from 800px to make the box wider */
+            width: 90%; /* Use a percentage to make it responsive */
+            padding: 40px; /* Increased padding for more internal space */
+            text-align: center;
+            background: rgba(0, 0, 0, 0.5); /* Semi-transparent background for readability */
+            color: #fff;
+            margin: auto; /* Keep it centered horizontally */
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+            justify-content: center; /* Center content vertically inside the box */
+            align-items: center; /* Center content horizontally inside the box */
+}
+
+        input[type="submit"], input[type="button"] {
+            background-color: #04AA6D;
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 17px;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover, input[type="submit"]:hover {
+            background-color: #007B50;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        ul li {
+            display: inline;
+            margin: 0 10px;
+        }
+
+        ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 24px; /* Increase the font size as needed */
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="background"></div> <!-- Separate container for the background -->
+
+<div class="main-content"> <!-- Main content wrapper for centering -->
+    <div class="center-container">
+        <h1>SORT THE MESS</h1>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="templates/about.html">About</a></li>
+            <li><a href="templates/contact.html">Contact</a></li>
+        </ul>
+        <form action="/result.html">
+            <p>Check for Popups to Move Ahead!</p>
+            <input type="submit" onclick="checkPopupsAndRunScript()" value="Check Popups">
+        </form>
+    </div>
+</div>
+
+<script> 
+    function checkPopupsAndRunScript() {
+        let testPopup = window.open('', '_blank', 'width=100,height=100');
+        if (!testPopup) {
+            alert('Popups are blocked. Please enable popups for this site and try again.');
+        } else {
+            testPopup.close();
+            fetch('/run-script')
+         
+                .then(response => response.json())
+                .then(data => {
+                    if(data.success) {
+//                         window.location.href = '/wait.html';
+                        window.location.href = '/result.html';
+                    } else {
+                        alert('Script execution failed: ' + data.error);
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
+    }
+</script>
+
+</body>
+</html>
